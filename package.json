@@ -17,6 +17,14 @@
   "author": "Kriegslustig <npm@ls7.ch>",
   "license": "MIT",
   "devDependencies": {
-    "ava": "^0.14.0"
+    "ava": "^0.14.0",
+    "sequelize": "^3.22.0",
+    "sqlite3": "^3.1.3"
+  },
+  "ava": {
+    "require": [
+      "babel-register"
+    ],
+    "babel": "inherit"
   }
 }
