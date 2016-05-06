@@ -4,7 +4,8 @@
   "description": "A Cycle.js driver for Sequelize",
   "main": "dist/main.js",
   "scripts": {
-    "test": "ava"
+    "test": "ava",
+    "build": "babel -w  src --out-dir dist"
   },
   "keywords": [
     "MySQL",
@@ -26,5 +27,8 @@
       "babel-register"
     ],
     "babel": "inherit"
+  },
+  "dependencies": {
+    "rx": "^4.1.0"
   }
 }

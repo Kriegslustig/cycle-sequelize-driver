@@ -1,8 +1,9 @@
 import test from 'ava'
 import Sequelize from 'sequelize'
 import fs from 'fs'
+import Rx from 'rx'
 
-// import makeSequelizeDriver from './dist/index.js'
+import makeSequelizeDriver from '../../dist/index.js'
 
 const storage = `${__dirname}/test.sqlite`
 
@@ -22,6 +23,16 @@ test.after((t) => {
 })
 
 test('Insert operations', (t) => {
-  t.pass()
+  const TestSet = global.sequelize.define(
+    'testset',
+    { a: { type: Sequelize.STRING } },
+    { freezeTableName: true }
+  )
+  const input$ = Rx.Observable.of([TestSet.sync(), 'define', 'TestSet'])
+  makeSequelizeDriver(global.sequelize)(input$)
+    .subscribe(
+      (v) => t.pass(),
+      (v) => t.fail()
+    )
 })
 
