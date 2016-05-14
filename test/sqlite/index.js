@@ -1,4 +1,5 @@
 const test = require('tape')
+const tapSpec = require('tap-spec')
 const Sequelize = require('sequelize')
 const fs = require('fs')
 const Rx = require('rx')
@@ -7,6 +8,10 @@ const s = require(`${__dirname}/../../dist/index.js`)
 const makeSequelizeDriver = s.makeSequelizeDriver
 const define = s.define
 const create = s.create
+
+test.createStream()
+  .pipe(tapSpec())
+  .pipe(process.stdout)
 
 const storage = `${__dirname}/test.sqlite`
 global.sequelize = new Sequelize('test', null, null, { dialect: 'sqlite', storage })
