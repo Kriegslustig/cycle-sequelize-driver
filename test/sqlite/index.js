@@ -3,36 +3,41 @@ import Sequelize from 'sequelize'
 import fs from 'fs'
 import Rx from 'rx'
 
-import makeSequelizeDriver from '../../dist/index.js'
+import { makeSequelizeDriver, define } from '../../dist/index.js'
 
 const storage = `${__dirname}/test.sqlite`
+global.sequelize = new Sequelize('test', null, null, { dialect: 'sqlite', storage })
 
-test.before((t) => {
-  fs.writeFile(storage, '', (err) => {
-    if (err) return t.fail()
-    global.sequelize = new Sequelize('test', null, null, { dialect: 'sqlite', storage })
-    t.pass()
-  })
-})
-
-test.after((t) => {
+test.cb.after((t) => {
   fs.unlink(storage, (err, data) => {
-    if (err) return t.fail()
-    t.pass()
+    if (err) console.error(err)
+    t.end()
   })
 })
 
-test('Insert operations', (t) => {
-  const TestSet = global.sequelize.define(
+test.cb('Definition operations', (t) => {
+  const input$ = Rx.Observable.of(define(
     'testset',
     { a: { type: Sequelize.STRING } },
     { freezeTableName: true }
-  )
-  const input$ = Rx.Observable.of([TestSet.sync(), 'define', 'TestSet'])
+  ))
   makeSequelizeDriver(global.sequelize)(input$)
     .subscribe(
-      (v) => t.pass(),
-      (v) => t.fail()
+      (s) => {
+        if (
+          s.has('testset')
+        ) {
+          Rx.Observable.of(s.get('testset').count())
+            .subscribe(
+              (n) => { if (n === 0) t.pass() },
+              () => { t.fail('Table not created') }
+            )
+        } else {
+          t.fail('Definition not properly made.')
+        }
+        t.end()
+      },
+      (err) => { t.fail(err.message); t.end() }
     )
 })
 
