@@ -62,16 +62,13 @@ function executeDefinitions(sequelize, definitions) {
         createdModels[_key2] = arguments[_key2];
       }
 
-      var state = (0, _immutable.Map)();
-      createdModels.forEach(function (_ref3) {
+      observer.onNext(createdModels.reduce(function (state, _ref3) {
         var _ref4 = (0, _slicedToArray3.default)(_ref3, 2);
 
         var name = _ref4[0];
         var model = _ref4[1];
-
-        state = state.set(name, model);
-      });
-      observer.onNext(state);
+        return state.set(name, model);
+      }, (0, _immutable.Map)()));
       observer.onCompleted();
     }).catch(function (err) {
       return observer.onError(err);

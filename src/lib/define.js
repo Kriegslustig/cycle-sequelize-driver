@@ -23,11 +23,13 @@ export function executeDefinitions (sequelize, definitions) {
   return O.create((observer) => {
     Promise.all(...models.map((m) => m.sync()))
       .then((...createdModels) => {
-        let state = Map()
-        createdModels.forEach(([name, model]) => {
-          state = state.set(name, model)
-        })
-        observer.onNext(state)
+        observer.onNext(
+          createdModels.reduce(
+            (state, [name, model]) =>
+              state.set(name, model),
+            Map()
+          )
+        )
         observer.onCompleted()
       })
       .catch((err) => observer.onError(err))
