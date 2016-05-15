@@ -30,7 +30,6 @@ function makeSequelizeDriver(sequelize) {
   });
   return function (input$) {
     return _rx.Observable.create(function (observer) {
-      console.log('Sub made');
       input$.subscribe(function (_ref) {
         var _ref2 = (0, _toArray3.default)(_ref);
 
@@ -38,7 +37,6 @@ function makeSequelizeDriver(sequelize) {
 
         var args = _ref2.slice(1);
 
-        console.log('executing ' + key.toString());
         switch (key) {
           case _define.defineKey:
             (0, _define.executeDefinitions)(sequelize, args).subscribe(function (models) {
@@ -57,6 +55,8 @@ function makeSequelizeDriver(sequelize) {
           default:
             observer.onError(new Error('Undefined operation: ' + key));
         }
+      }, function (err) {
+        return observer.onError(err);
       });
     });
   };
