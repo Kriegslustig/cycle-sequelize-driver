@@ -2,11 +2,10 @@ const Sequelize = require('sequelize')
 import { Observable as O } from 'rx'
 import { Map } from 'immutable'
 
-import { defineKey, createDefinitions, executeDefinitions } from './lib/define'
-import { createKey, createCreates, executeCreates } from './lib/create'
+import { defineKey, define, executeDefinitions } from './lib/define'
+import { createKey, create, executeCreates } from './lib/create'
 
-export { createDefinitions as define }
-export { createCreates as create }
+export { define, create }
 
 export function makeSequelizeDriver (sequelize) {
   if (!Sequelize.prototype.isPrototypeOf(sequelize)) throw Error('makeSequelizeDriver expects parameter 1 to be an instance of Sequelize')

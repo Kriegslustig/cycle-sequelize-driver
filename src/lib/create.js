@@ -6,7 +6,7 @@ import { Observable as O } from 'rx'
 
 export const createKey = Symbol.for('sequelize create action')
 
-export function createCreates (collection, ...parameters) {
+export function create (collection, ...parameters) {
   return [
     createKey,
     [collection,

@@ -3,7 +3,7 @@ import { Map } from 'immutable'
 
 export const defineKey = Symbol.for('sequelize define action')
 
-export function createDefinitions (...args) {
+export function define (...args) {
   return [
     defineKey,
     ...[(
