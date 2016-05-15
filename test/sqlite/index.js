@@ -48,9 +48,9 @@ describe('Definition operations', () => {
   })
 })
 
-describe('Insertion operations', () => {
+describe('Insertion operations', function () {
   it('should insert entries', function (done) {
-    const subject$ = new Rx.Subject()
+    const subject$ = new Rx.ReplaySubject()
     const output$ = makeSequelizeDriver(global.sequelize)(subject$)
     const actions$ = Rx.Observable.merge(
       output$
