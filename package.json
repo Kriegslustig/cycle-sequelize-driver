@@ -7,7 +7,7 @@
     "test": "mocha --require source-map-support/register test/**/*.js",
     "watch-test": "npm test -- --watch",
     "build": "babel src --out-dir dist; for file in $(ls dist/*/*.js dist/*.js); do uglifyjs ${file} --comments --mangle --compress --output ${file}; done",
-    "watch-build": "npm build -- --source-maps inline -w"
+    "watch-build": "babel src --out-dir dist --source-maps inline -w"
   },
   "keywords": [
     "MySQL",
