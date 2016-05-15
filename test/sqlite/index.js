@@ -66,10 +66,10 @@ describe('Insertion operations', function () {
           setTimeout(() => {
             s.get('testset').findOne({ where: { a: 'test1' } })
               .then((o) => {
-                o.assert.equal({ a: 'test1' })
+                assert.equal(o.a, 'test1')
                 done()
               })
-              .catch(() => { throw new Error('Failed to query DB') })
+              .catch((err) => { throw err })
           }, 200)
           return create('testset', { a: 'test1' })
         })(false))
