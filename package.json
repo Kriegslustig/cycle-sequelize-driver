@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha --require source-map-support/register test/**/*.js",
     "watch-test": "npm test -- --watch",
-    "build": "babel src --out-dir dist",
+    "build": "babel src --out-dir dist; for file in $(ls dist/*/*.js dist/*.js); do uglifyjs ${file} --comments --mangle --compress --output ${file}; done",
     "watch-build": "npm build -- --source-maps inline -w"
   },
   "keywords": [
@@ -23,7 +23,8 @@
     "chai": "^3.5.0",
     "mocha": "^2.4.5",
     "sequelize": "^3.22.0",
-    "sqlite3": "^3.1.3"
+    "sqlite3": "^3.1.3",
+    "uglify-js": "^2.6.2"
   },
   "dependencies": {
     "immutable": "^3.8.1",
