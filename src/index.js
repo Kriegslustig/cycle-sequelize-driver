@@ -25,7 +25,7 @@ export function makeSequelizeDriver (sequelize) {
               )
               break
             case createKey:
-              executeCreates(state).subscribe(
+              executeCreates(state, ...args).subscribe(
                 () => {},
                 (err) => observer.onError(err),
                 () => {}

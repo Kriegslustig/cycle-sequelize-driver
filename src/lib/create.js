@@ -26,7 +26,7 @@ export function executeCreates (state, [collection, creationOps]) {
     const model = state.get(collection)
     if (!model) {
       observer.onError(new Error(`Collection has not been defined yet: ${collection}`))
-      observer.onComplete()
+      observer.onCompleted()
       return
     }
 
@@ -38,10 +38,10 @@ export function executeCreates (state, [collection, creationOps]) {
       (creationOps.map(([o, t]) => o)),
       options
     )
-      .then(() => observer.onComplete())
+      .then(() => observer.onCompleted())
       .catch((err) => {
         observer.onError(err)
-        observer.onComplete()
+        observer.onCompleted()
       })
     observer.onNext()
   })
