@@ -1,3 +1,4 @@
+const Sequelize = require('sequelize')
 import { Observable as O } from 'rx'
 import { Map } from 'immutable'
 
@@ -8,6 +9,7 @@ export { createDefinitions as define }
 export { createCreates as create }
 
 export function makeSequelizeDriver (sequelize) {
+  if (!Sequelize.prototype.isPrototypeOf(sequelize)) throw Error('makeSequelizeDriver expects parameter 1 to be an instance of Sequelize')
   let state = Map({
     sequelize,
     model: Map()
