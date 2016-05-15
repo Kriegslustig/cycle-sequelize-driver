@@ -4,9 +4,10 @@
   "description": "A Cycle.js driver for Sequelize",
   "main": "dist/main.js",
   "scripts": {
-    "test": "mocha test/**/*.js",
-    "watch-test": "mocha test/**/*.js --watch",
-    "build": "babel -w  src --out-dir dist"
+    "test": "mocha --require source-map-support/register test/**/*.js",
+    "watch-test": "npm test -- --watch",
+    "build": "babel src --out-dir dist",
+    "watch-build": "npm build -- --source-maps inline -w"
   },
   "keywords": [
     "MySQL",
