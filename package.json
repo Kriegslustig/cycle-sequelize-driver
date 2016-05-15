@@ -4,8 +4,8 @@
   "description": "A Cycle.js driver for Sequelize",
   "main": "dist/main.js",
   "scripts": {
-    "test": "tape test/**/*.js",
-    "watch-test": "watch 'tape test/**/*.js' src test",
+    "test": "mocha test/**/*.js",
+    "watch-test": "mocha test/**/*.js --watch",
     "build": "babel -w  src --out-dir dist"
   },
   "keywords": [
@@ -19,17 +19,10 @@
   "author": "Kriegslustig <npm@ls7.ch>",
   "license": "MIT",
   "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
     "sequelize": "^3.22.0",
-    "sqlite3": "^3.1.3",
-    "tap-spec": "^4.1.1",
-    "tape": "^4.5.1",
-    "watch": "^0.18.0"
-  },
-  "ava": {
-    "require": [
-      "babel-register"
-    ],
-    "babel": "inherit"
+    "sqlite3": "^3.1.3"
   },
   "dependencies": {
     "immutable": "^3.8.1",
