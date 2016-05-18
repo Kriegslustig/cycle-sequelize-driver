@@ -97,12 +97,11 @@ describe('Find operations', () => {
       })(false))
       .filter((op) => !!op)
     output$
-      .combineLatest(
-        findOne(s, 'testset', { where: { a: 'test7' } })
-      )
+      .flatMap((s) => findOne(s, 'testset', { where: { a: 'test7' } }))
+      .combineLatest(output$)
       .tap((args) => {
-        if (args.v) {
-          assert.equal(args.a, 'test7')
+        if (args[0]) {
+          assert.equal(args[0].a, 'test7')
         }
       })
     output$.subscribe(
