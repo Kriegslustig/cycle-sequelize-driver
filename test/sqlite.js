@@ -90,18 +90,21 @@ describe('Find operations', () => {
     const output$ =
       makeSequelizeDriver(global.sequelize)(subject$)
       .filter((s) => s.has('testset'))
-      .tap((s) => {
-        const v = findOne(s, 'testset', { where: { a: 'test7' } })
-        if (v) {
-          assert.equal(v.a, 'test7')
-        }
-      })
       .map(((done) => (s) => {
         if (done) return
         done = true
         return create('testset', { a: 'test7' })
       })(false))
       .filter((op) => !!op)
+    output$
+      .combineLatest(
+        findOne(s, 'testset', { where: { a: 'test7' } })
+      )
+      .tap((args) => {
+        if (args.v) {
+          assert.equal(args.a, 'test7')
+        }
+      })
     output$.subscribe(
       (op) => { subject$.onNext(op) },
       (err) => { throw err }
