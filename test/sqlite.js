@@ -8,15 +8,17 @@ const Sequelize = require('sequelize')
 const fs = require('fs')
 const Rx = require('rx')
 
-const s = require(`${__dirname}/../../dist/index.js`)
+const s = require('../dist/index.js')
 const makeSequelizeDriver = s.makeSequelizeDriver
 const define = s.define
 const create = s.create
+const findOne = s.findOne
+
+const h = require('./helpers.js')
 
 const storage = `${__dirname}/test.sqlite`
 
 beforeEach(() => {
-  console.log('Before')
   global.sequelize = new Sequelize('test', null, null, { dialect: 'sqlite', storage })
 })
 
@@ -53,7 +55,7 @@ describe('Definition operations', () => {
 
 describe('Insertion operations', function () {
   it('should insert entries', function (done) {
-    const subject$ = new Rx.ReplaySubject()
+    const subject$ = h.createTestTable()
     const output$ = makeSequelizeDriver(global.sequelize)(subject$)
     const actions$ = Rx.Observable.merge(
       output$
@@ -75,12 +77,32 @@ describe('Insertion operations', function () {
         })(false))
     )
 
-    subject$.onNext(define(
-      'testset',
-      { a: { type: Sequelize.STRING } },
-      { freezeTableName: true }
-    ))
     actions$.subscribe(
+      (op) => { subject$.onNext(op) },
+      (err) => { throw err }
+    )
+  })
+})
+
+describe('Find operations', () => {
+  it('should find contents of a table and send updates reactively', (done) => {
+    const subject$ = h.createTestTable()
+    const output$ =
+      makeSequelizeDriver(global.sequelize)(subject$)
+      .filter((s) => s.has('testset'))
+      .tap((s) => {
+        const v = findOne(s, 'testset', { where: { a: 'test7' } })
+        if (v) {
+          assert.equal(v.a, 'test7')
+        }
+      })
+      .map(((done) => (s) => {
+        if (done) return
+        done = true
+        return create('testset', { a: 'test7' })
+      })(false))
+      .filter((op) => !!op)
+    output$.subscribe(
       (op) => { subject$.onNext(op) },
       (err) => { throw err }
     )
