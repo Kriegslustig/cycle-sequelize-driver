@@ -57,25 +57,24 @@ describe('Insertion operations', function () {
   it('should insert entries', function (done) {
     const subject$ = h.createTestTable()
     const output$ = makeSequelizeDriver(global.sequelize)(subject$)
-    const actions$ = Rx.Observable.merge(
-      output$
-        .filter((s) => s.has('testset'))
-        .map(((executed) => (s) => {
-          if (executed) return s
-          executed = true
+    const actions$ = output$
+      .filter((s) => s.has('testset'))
+      .map(((executed) => (s) => {
+        if (executed) return s
+        executed = true
 
-          // Create an entity
-          setTimeout(() => {
-            s.get('testset').findOne({ where: { a: 'test1' } })
-              .then((o) => {
-                assert.equal(o.a, 'test1')
-                done()
-              })
-              .catch((err) => { throw err })
-          }, 200)
-          return create('testset', { a: 'test1' })
-        })(false))
-    )
+        // Create an entity
+        setTimeout(() => {
+          s.get('testset').findOne({ where: { a: 'test1' } })
+            .then((o) => {
+              assert.ok(o)
+              assert.equal(o.a, 'test1')
+              done()
+            })
+            .catch((err) => { throw err })
+        }, 200)
+        return create('testset', { a: 'test1' })
+      })(false))
 
     actions$.subscribe(
       (op) => { subject$.onNext(op) },

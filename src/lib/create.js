@@ -1,4 +1,5 @@
 import { Observable as O } from 'rx'
+import { validate } from './_helpers.js'
 
 /**
  * @typedef {[ string, [ object, object ] ]} createOp
@@ -23,13 +24,7 @@ export function create (collection, ...parameters) {
  */
 export function executeCreates (state, [collection, creationOps]) {
   return O.create((observer) => {
-    const model = state.get(collection)
-    if (!model) {
-      observer.onError(new Error(`Collection has not been defined yet: ${collection}`))
-      observer.onCompleted()
-      return
-    }
-
+    if (!validate.isCollection(state, collection, observer)) return
     const options = creationOps.reduce(
       (m, [o, t]) => Object.assign({}, m, t),
       {}

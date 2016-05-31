@@ -1,0 +1,1 @@
+"use strict";Object.defineProperty(exports,"__esModule",{value:!0});var validate=exports.validate={isCollection:function(e,t,o){var r=e.get(t);return r?!0:(o.onError(new Error("Collection has not been defined yet: "+t)),o.onCompleted(),!1)}};
