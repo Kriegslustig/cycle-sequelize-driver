@@ -38,7 +38,6 @@ export function executeCreates (state, [collection, creationOps]) {
         observer.onError(err)
         observer.onCompleted()
       })
-    observer.onNext()
   })
 }
 

@@ -86,26 +86,25 @@ describe('Insertion operations', function () {
 describe('Find operations', () => {
   it('should find contents of a table and send updates reactively', (done) => {
     const subject$ = h.createTestTable()
-    const output$ =
-      makeSequelizeDriver(global.sequelize)(subject$)
-      .filter((s) => s.has('testset'))
-      .map(((done) => (s) => {
-        if (done) return
-        done = true
-        return create('testset', { a: 'test7' })
-      })(false))
-      .filter((op) => !!op)
-    output$
-      .flatMap((s) => findOne(s, 'testset', { where: { a: 'test7' } }))
-      .combineLatest(output$)
-      .tap((args) => {
-        if (args[0]) {
-          assert.equal(args[0].a, 'test7')
-        }
-      })
-    output$.subscribe(
+    const output$ = makeSequelizeDriver(global.sequelize)(subject$).share()
+    const actions$ = Rx.Observable.merge(
+      output$
+        .filter((s) => s.has('testset'))
+        .map(h.once(() =>
+          create('testset', { a: 'test7' })
+        )),
+      output$
+        .filter((s) => s.has('testset'))
+        .flatMap((s) => findOne(s.get('testset'), { where: { a: 'test7' } }))
+        .tap((inst) => {
+          assert.equal(inst.getDataValue('a'), 'test7')
+          done()
+        })
+        .filter(() => false)
+    ).filter((op) => !!op)
+    actions$.subscribe(
       (op) => { subject$.onNext(op) },
-      (err) => { throw err }
+      (err) => { console.error(err); throw err }
     )
   })
 })
