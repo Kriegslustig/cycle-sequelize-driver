@@ -5,8 +5,9 @@ import { Map } from 'immutable'
 import { defineKey, define, executeDefinitions } from './lib/define'
 import { createKey, create, executeCreates } from './lib/create'
 import { findOne } from './lib/findOne'
+import { findAll } from './lib/findAll'
 
-export { define, create, findOne }
+export { define, create, findOne, findAll }
 
 export function makeSequelizeDriver (sequelize) {
   if (!Sequelize.prototype.isPrototypeOf(sequelize)) throw Error('makeSequelizeDriver expects parameter 1 to be an instance of Sequelize')
