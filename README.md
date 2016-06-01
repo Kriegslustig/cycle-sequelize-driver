@@ -1,6 +1,6 @@
 # Cycle Sequelize Driver
 
-![https://travis-ci.org/Kriegslustig/cycle-sequelize-driver.svg?branch=master](CI Build Status)
+![CI Build Status](https://travis-ci.org/Kriegslustig/cycle-sequelize-driver.svg?branch=master)
 
 A Cycle.js driver for Sequelize.
 
