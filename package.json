@@ -6,8 +6,10 @@
   "scripts": {
     "test": "mocha --require source-map-support/register test/**/*.js",
     "watch-test": "npm test -- --watch",
-    "build": "babel --prests=babel-preset-es2015 src --out-dir dist; for file in $(ls dist/*/*.js dist/*.js); do uglifyjs ${file} --comments --mangle --compress --output ${file}; done",
-    "watch-build": "babel --prests=babel-preset-es2015 src --out-dir dist --source-maps inline -w"
+    "build": "babel src --out-dir dist; for file in $(ls dist/*/*.js dist/*.js); do uglifyjs ${file} --comments --mangle --compress --output ${file}; done",
+    "watch-build": "babel src --out-dir dist --source-maps inline -w",
+    "prepublish": "npm run build",
+    "postinstall": "if [[ \"${NODE_ENV}\" != \"production\" ]]; then cd node_modules/sqlite3 && npm i --build-from-source && cd ../../; fi"
   },
   "keywords": [
     "MySQL",
@@ -21,6 +23,8 @@
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.9.0",
+    "babel-plugin-espower": "^2.2.0",
+    "babel-plugin-transform-runtime": "^6.9.0",
     "babel-preset-es2015": "^6.9.0",
     "chai": "^3.5.0",
     "mocha": "^2.4.5",
