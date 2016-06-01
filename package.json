@@ -20,6 +20,7 @@
   "author": "Kriegslustig <npm@ls7.ch>",
   "license": "MIT",
   "devDependencies": {
+    "babel-cli": "^6.9.0",
     "chai": "^3.5.0",
     "mocha": "^2.4.5",
     "sequelize": "^3.22.0",
